@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeoSmart.Shared", "NeoSmart
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeoSmart.Backend", "NeoSmart.Backend\NeoSmart.Backend.csproj", "{6A618C1D-C0D5-4ED3-A4CF-5822BAE43EE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoSmart.Frontend", "NeoSmart.Frontend\NeoSmart.Frontend.csproj", "{8E730309-DEF9-4EC0-A960-9902C32280F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeoSmart.Frontend", "NeoSmart.Frontend\NeoSmart.Frontend.csproj", "{8E730309-DEF9-4EC0-A960-9902C32280F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
