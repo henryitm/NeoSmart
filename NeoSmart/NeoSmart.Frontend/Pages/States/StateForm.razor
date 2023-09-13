@@ -5,10 +5,10 @@
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="mb-3">
-        <label>País:</label>
+        <label>Estado/Departamento:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Country.Name" />
-            <ValidationMessage For="@(() => Country.Name)" />
+            <InputText class="form-control" @bind-Value="@State.Name" />
+            <ValidationMessage For="@(() => State.Name)" />
         </div>
     </div>
     <button class="btn btn-primary" type="submit">Guardar</button>
@@ -20,12 +20,12 @@
 
     protected override void OnInitialized()
     {
-        editContext = new(Country);
+        editContext = new(State);
     }
 
     [EditorRequired]
     [Parameter]
-    public Country Country { get; set; } = null!;
+    public State State { get; set; } = null!;
 
     [EditorRequired]
     [Parameter]

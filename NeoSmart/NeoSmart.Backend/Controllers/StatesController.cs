@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NeoSmart.Shared.Entities;
-using NeoSmart.Backend.Intertfaces;
 using NeoSmart.Backend.Data;
+using NeoSmart.Backend.Intertfaces;
+using NeoSmart.Shared.Entities;
 
 namespace NeoSmart.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CountriesController : GenericController<Country>
+    public class StatesController : GenericController<State>
     {
         private readonly DataContext _context;
 
-        public CountriesController(IGenericUnitOfWork<Country> unitOfWork, DataContext context) : base(unitOfWork)
+        public StatesController(IGenericUnitOfWork<State> unitOfWork, DataContext context) : base(unitOfWork)
         {
             _context = context;
         }
@@ -20,23 +20,22 @@ namespace NeoSmart.Backend.Controllers
         [HttpGet]
         public override async Task<IActionResult> GetAsync()
         {
-            return Ok(await _context.Countries
-                .Include(c => c.States)
+            return Ok(await _context.States
+                .Include(s => s.Cities)
                 .ToListAsync());
         }
 
         [HttpGet("{id}")]
         public override async Task<IActionResult> GetAsync(int id)
         {
-            var country = await _context.Countries
-                .Include(c => c.States!)
-                .ThenInclude(s => s.Cities)
-                .FirstOrDefaultAsync(c => c.Id == id);
-            if (country == null)
+            var state = await _context.States
+                .Include(s => s.Cities)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            if (state == null)
             {
                 return NotFound();
             }
-            return Ok(country);
+            return Ok(state);
         }
     }
 }
