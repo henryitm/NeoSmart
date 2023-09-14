@@ -1,0 +1,39 @@
+﻿@page "/users/create"
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+
+<h3>Nuevo User</h3>
+
+<UserForm @ref="userForm" User="user" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+
+@code {
+    private User user = new();
+    private UserForm? userForm;
+
+    private async Task CreateAsync()
+    {
+        var response = await repository.PostAsync("/api/users", user);
+        if (response.Error)
+        {
+            var message = await response.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+        Return();
+        var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.BottomEnd,
+                ShowConfirmButton = true,
+                Timer = 3000
+            });
+        await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro creado con éxito.");
+    }
+
+    private void Return()
+    {
+        userForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo("/users");
+    }
+}

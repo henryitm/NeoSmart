@@ -2,6 +2,7 @@
 using NeoSmart.Backend.Services;
 using NeoSmart.Shared.Entities;
 using NeoSmart.Shared.Responses;
+using System.Data;
 
 namespace NeoSmart.Backend.Data
 {
@@ -16,10 +17,35 @@ namespace NeoSmart.Backend.Data
             _apiService = apiService;
         }
 
+
+
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
             await CheckCountriesAsync();
+            await CheckRolesAsync();
+            await CheckUsersAsync();
+        }
+
+        private async Task CheckRolesAsync()
+        {
+            if (!_context.Roles.Any())
+            {
+                _context.Roles.Add(new Role { Name = "Administrador" });
+                _context.Roles.Add(new Role { Name = "Gerente" });
+                _context.Roles.Add(new Role { Name = "Lider" });
+                _context.Roles.Add(new Role { Name = "Capacitador" });
+                _context.Roles.Add(new Role { Name = "Empleado" });
+                await _context.SaveChangesAsync();
+            }
+        }
+        private async Task CheckUsersAsync()
+        {
+            if (!_context.Users.Any())
+            {
+                _context.Users.Add(new User { Document="1234", FirstName="primer nombre",LastName="apellidos",Email="prueba1@gmail.com",CityId=1 });
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task CheckCountriesAsync()
