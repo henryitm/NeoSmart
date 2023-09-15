@@ -25,8 +25,21 @@ namespace NeoSmart.Backend.Data
             await CheckCountriesAsync();
             await CheckRolesAsync();
             await CheckUsersAsync();
+            await CheckPositionsAsync();
         }
 
+        private async Task CheckPositionsAsync()
+        {
+            if (!_context.Positions.Any())
+            {
+                _context.Positions.Add(new Position { Name = "Administrador" });
+                _context.Positions.Add(new Position { Name = "Gerente" });
+                _context.Positions.Add(new Position { Name = "Lider" });
+                _context.Positions.Add(new Position { Name = "Capacitador" });
+                _context.Positions.Add(new Position { Name = "Empleado" });
+                await _context.SaveChangesAsync();
+            }
+        }
         private async Task CheckRolesAsync()
         {
             if (!_context.Roles.Any())
@@ -39,6 +52,8 @@ namespace NeoSmart.Backend.Data
                 await _context.SaveChangesAsync();
             }
         }
+
+
         private async Task CheckUsersAsync()
         {
             if (!_context.Users.Any())

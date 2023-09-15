@@ -1,0 +1,94 @@
+﻿@page "/positions"
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+
+<h3>Cargos</h3>
+
+<GenericList MyList="positions">
+    <NoRecords>
+        <p>Aun no hay cargos registrados.</p>
+    </NoRecords>
+    <Body>
+        <a href="/positions/create" class="btn btn-primary">Nuevo Cargo</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Cargo</th>
+                    <th>Entrenamiento</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var position in positions!)
+                {
+                    <tr>
+                        <td><a href="/positions/details/@position.Id">@position.Name</a></td>
+                        <td>@position.CoachingsNumber</td>
+                        <td>
+                            <a class="btn btn-warning btn-sm" href="/positions/edit/@position.Id">Editar</a>
+                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(position))>Borrar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </Body>
+</GenericList>
+
+@code {
+    private List<Position>? positions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        var response = await repository.GetAsync<List<Position>>("api/positions");
+        if (response.Error)
+        {
+            var message = await response.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        positions = response.Response;
+    }
+
+    private async Task DeleteAsync(Position position)
+    {
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = $"¿Esta seguro que quieres borrar el cargo: {position.Name}?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+        if (confirm)
+        {
+            return;
+        }
+
+        var response = await repository.DeleteAsync($"api/positions/{position.Id}");
+        if (response.Error)
+        {
+            var message = await response.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        await LoadAsync();
+
+        var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.BottomEnd,
+                ShowConfirmButton = true,
+                Timer = 3000
+            });
+        await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
+    }
+}

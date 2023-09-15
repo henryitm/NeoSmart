@@ -1,0 +1,114 @@
+﻿@page "/positions/details/{PositionId:int}"
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+
+@if (position is null)
+{
+    <Loading />
+}
+else
+{
+    <h3>@position.Name</h3>
+    <div class="mb-2">
+        <a class="btn btn-primary" href="/coachings/create/@position.Id">Nuevo Entrenamiento</a>
+        <a class="btn btn-success" href="/positions">Regresar</a>
+    </div>
+
+    <h4>Esntrenamiento</h4>
+    <GenericList MyList="position.Coachings!.ToList()">
+        <Body>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Entrenamiento</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var coaching in position.Coachings!)
+                    {
+                        <tr>
+                            <td>@coaching.Name</td>
+                            <td>
+                                <a class="btn btn-warning btn-sm" href="/coachings/edit/@coaching.Id">Editar</a>
+                                <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(coaching))>Borrar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </Body>
+    </GenericList>
+}
+
+@code {
+    private Position? position;
+
+    [Parameter]
+    public int PositionId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        var responseHttp = await repository.GetAsync<Position>($"/api/positions/{PositionId}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/positions");
+                return;
+            }
+
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        position = responseHttp.Response;
+    }
+
+    private async Task DeleteAsync(Coaching coaching)
+    {
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = $"¿Realmente deseas eliminar el entrenamiento? {coaching.Name}",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                CancelButtonText = "No",
+                ConfirmButtonText = "Si"
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+        if (confirm)
+        {
+            return;
+        }
+
+        var responseHttp = await repository.DeleteAsync($"/api/coachings/{coaching.Id}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+        }
+
+        await LoadAsync();
+        var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.BottomEnd,
+                ShowConfirmButton = true,
+                Timer = 3000
+            });
+        await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
+    }
+}

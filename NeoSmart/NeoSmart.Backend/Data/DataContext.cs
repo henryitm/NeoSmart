@@ -9,6 +9,10 @@ namespace NeoSmart.Backend.Data
         {
         }
 
+        public DbSet<Position> Positions { get; set; }
+
+        public DbSet<Coaching> Coachings { get; set; }
+
         public DbSet<User> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
@@ -22,6 +26,8 @@ namespace NeoSmart.Backend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Position>().HasIndex(c => c.Name).IsUnique();
+            modelBuilder.Entity<Coaching>().HasIndex(s => new { s.PositionId, s.Name }).IsUnique();
             modelBuilder.Entity<User>().HasIndex(c => c.Document).IsUnique();
             modelBuilder.Entity<Role>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
