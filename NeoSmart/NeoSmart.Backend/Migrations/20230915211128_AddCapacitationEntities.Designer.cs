@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NeoSmart.Backend.Data;
 
@@ -10,9 +11,11 @@ using NeoSmart.Backend.Data;
 namespace NeoSmart.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230915211128_AddCapacitationEntities")]
+    partial class AddCapacitationEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,32 +43,6 @@ namespace NeoSmart.Backend.Migrations
                         .IsUnique();
 
                     b.ToTable("Capacitations");
-                });
-
-            modelBuilder.Entity("NeoSmart.Shared.Entities.CapacitationTheme", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CapacitationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ThemeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CapacitationId");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("ThemeId");
-
-                    b.ToTable("CapacitationsThemes");
                 });
 
             modelBuilder.Entity("NeoSmart.Shared.Entities.City", b =>
@@ -265,25 +242,6 @@ namespace NeoSmart.Backend.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("NeoSmart.Shared.Entities.CapacitationTheme", b =>
-                {
-                    b.HasOne("NeoSmart.Shared.Entities.Capacitation", "Capacitation")
-                        .WithMany("CapacitationThemes")
-                        .HasForeignKey("CapacitationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NeoSmart.Shared.Entities.Theme", "Theme")
-                        .WithMany("CapacitationThemes")
-                        .HasForeignKey("ThemeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Capacitation");
-
-                    b.Navigation("Theme");
-                });
-
             modelBuilder.Entity("NeoSmart.Shared.Entities.City", b =>
                 {
                     b.HasOne("NeoSmart.Shared.Entities.State", "State")
@@ -328,11 +286,6 @@ namespace NeoSmart.Backend.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("NeoSmart.Shared.Entities.Capacitation", b =>
-                {
-                    b.Navigation("CapacitationThemes");
-                });
-
             modelBuilder.Entity("NeoSmart.Shared.Entities.Country", b =>
                 {
                     b.Navigation("States");
@@ -346,11 +299,6 @@ namespace NeoSmart.Backend.Migrations
             modelBuilder.Entity("NeoSmart.Shared.Entities.State", b =>
                 {
                     b.Navigation("Cities");
-                });
-
-            modelBuilder.Entity("NeoSmart.Shared.Entities.Theme", b =>
-                {
-                    b.Navigation("CapacitationThemes");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,36 +1,30 @@
-﻿@page "/users"
+﻿@page "/capacitations"
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 
-<h3>Usuarios</h3>
+<h3>Capacitaciones</h3>
 
-<GenericList MyList="users">
+<GenericList MyList="capacitations">
     <NoRecords>
-        <p>Aun no hay Usuarios registrados.</p>
+        <p>Aun no hay Capacitaciones registradas.</p>
     </NoRecords>
     <Body>
-        <a href="/users/create" class="btn btn-primary">Nuevo Usuario</a>
+        <a href="/capacitations/create" class="btn btn-primary">Nueva Capacitación</a>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Documento</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Email</th>
+                    <th>Capacitación</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var user in users!)
+                @foreach (var capacitation in capacitations!)
                 {
                     <tr>
-                        <td>@user.Document</td>
-                        <td>@user.FirstName</td>
-                        <td>@user.LastName</td>
-                        <td>@user.Email</td>
+                        <td>@capacitation.Name</td>
                         <td>
-                            <a class="btn btn-warning btn-sm" href="/users/edit/@user.Id">Editar</a>
-                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(user))>Borrar</button>
+                            <a class="btn btn-warning btn-sm" href="/capacitations/edit/@capacitation.Id">Editar</a>
+                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(capacitation))>Borrar</button>
                         </td>
                     </tr>
                 }
@@ -40,7 +34,7 @@
 </GenericList>
 
 @code {
-    private List<User>? users;
+    private List<Capacitation>? capacitations;
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,7 +43,7 @@
 
     private async Task LoadAsync()
     {
-        var response = await repository.GetAsync<List<User>>("api/users");
+        var response = await repository.GetAsync<List<Capacitation>>("api/capacitations");
         if (response.Error)
         {
             var message = await response.GetErrorMessageAsync();
@@ -57,15 +51,15 @@
             return;
         }
 
-        users = response.Response;
+        capacitations = response.Response;
     }
 
-    private async Task DeleteAsync(User user)
+    private async Task DeleteAsync(Capacitation capacitation)
     {
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirmación",
-                Text = $"¿Esta seguro que quieres borrar el Usuario: {user.FirstName}?",
+                Text = $"¿Esta seguro que quieres borrar la capacitación: {capacitation.Name}?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true
             });
@@ -76,7 +70,7 @@
             return;
         }
 
-        var response = await repository.DeleteAsync($"api/users/{user.Id}");
+        var response = await repository.DeleteAsync($"api/capacitations/{capacitation.Id}");
         if (response.Error)
         {
             var message = await response.GetErrorMessageAsync();

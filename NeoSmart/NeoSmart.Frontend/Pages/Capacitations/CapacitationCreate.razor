@@ -1,19 +1,19 @@
-﻿@page "/users/create"
+﻿@page "/capacitations/create"
 @inject NavigationManager navigationManager
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 
-<h3>Nuevo Usuario</h3>
+<h3>Nueva Capacitación</h3>
 
-<UserForm @ref="userForm" User="user" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+<CapacitationForm @ref="capacitationForm" Capacitation="capacitation" OnValidSubmit="CreateAsync" ReturnAction="Return" />
 
 @code {
-    private User user = new();
-    private UserForm? userForm;
+    private Capacitation capacitation = new();
+    private CapacitationForm? capacitationForm;
 
     private async Task CreateAsync()
     {
-        var response = await repository.PostAsync("/api/users", user);
+        var response = await repository.PostAsync("/api/capacitations", capacitation);
         if (response.Error)
         {
             var message = await response.GetErrorMessageAsync();
@@ -33,7 +33,7 @@
 
     private void Return()
     {
-        userForm!.FormPostedSuccessfully = true;
-        navigationManager.NavigateTo("/users");
+        capacitationForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo("/capacitations");
     }
 }

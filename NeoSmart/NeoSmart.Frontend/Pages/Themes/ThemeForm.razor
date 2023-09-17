@@ -5,31 +5,10 @@
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="mb-3">
-        <label>Documento:</label>
+        <label>Tema:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@User.Document" />
-            <ValidationMessage For="@(() => User.Document)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Nombres:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@User.FirstName" />
-            <ValidationMessage For="@(() => User.FirstName )" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Apellidos:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@User.LastName" />
-            <ValidationMessage For="@(() => User.LastName )" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Email:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@User.Email" />
-            <ValidationMessage For="@(() => User.Email )" />
+            <InputText class="form-control" @bind-Value="@Theme.Name" />
+            <ValidationMessage For="@(() => Theme.Name)" />
         </div>
     </div>
     <button class="btn btn-primary" type="submit">Guardar</button>
@@ -41,12 +20,12 @@
 
     protected override void OnInitialized()
     {
-        editContext = new(User);
+        editContext = new(Theme);
     }
 
     [EditorRequired]
     [Parameter]
-    public User User { get; set; } = null!;
+    public Theme Theme { get; set; } = null!;
 
     [EditorRequired]
     [Parameter]

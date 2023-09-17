@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NeoSmart.Shared.Entities;
 using NeoSmart.Backend.Intertfaces;
 using NeoSmart.Backend.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NeoSmart.Backend.Controllers
 {
@@ -15,6 +16,13 @@ namespace NeoSmart.Backend.Controllers
         public CountriesController(IGenericUnitOfWork<Country> unitOfWork, DataContext context) : base(unitOfWork)
         {
             _context = context;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCombo()
+        {
+            return Ok(await _context.Countries.ToListAsync());
         }
 
         [HttpGet]

@@ -1,37 +1,34 @@
-﻿@inject SweetAlertService sweetAlertService
+﻿@inject IRepository repository
+@inject SweetAlertService sweetAlertService
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigationAsync"></NavigationLock>
 
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="mb-3">
-        <label>Documento:</label>
+        <label>Capacitación:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@User.Document" />
-            <ValidationMessage For="@(() => User.Document)" />
+            <InputText class="form-control" @bind-Value="@Capacitation.Name" />
+            <ValidationMessage For="@(() => Capacitation.Name)" />
         </div>
     </div>
+
     <div class="mb-3">
-        <label>Nombres:</label>
+        <label>Tema:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@User.FirstName" />
-            <ValidationMessage For="@(() => User.FirstName )" />
+            <select class="form-select" id="temaselect">
+                <option value="0">-- Seleccione un tema --</option>
+                @if (themes is not null)
+                {
+                    @foreach (var theme in themes)
+                    {
+                        <option value="@theme.Id">@theme.Name</option>
+                    }
+                }
+            </select>
         </div>
     </div>
-    <div class="mb-3">
-        <label>Apellidos:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@User.LastName" />
-            <ValidationMessage For="@(() => User.LastName )" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Email:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@User.Email" />
-            <ValidationMessage For="@(() => User.Email )" />
-        </div>
-    </div>
+
     <button class="btn btn-primary" type="submit">Guardar</button>
     <button class="btn btn-success" @onclick="ReturnAction">Regresar</button>
 </EditForm>
@@ -41,12 +38,14 @@
 
     protected override void OnInitialized()
     {
-        editContext = new(User);
+        editContext = new(Capacitation);
     }
+
+    private List<Theme>? themes;
 
     [EditorRequired]
     [Parameter]
-    public User User { get; set; } = null!;
+    public Capacitation Capacitation { get; set; } = null!;
 
     [EditorRequired]
     [Parameter]
@@ -57,6 +56,24 @@
     public EventCallback ReturnAction { get; set; }
 
     public bool FormPostedSuccessfully { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadThemesAsync();
+    }
+
+    private async Task LoadThemesAsync()
+    {
+        var responseHttp = await repository.GetAsync<List<Theme>>("/api/themes/GetCombo");
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        themes = responseHttp.Response;
+    }
 
     private async Task OnBeforeInternalNavigationAsync(LocationChangingContext context)
     {

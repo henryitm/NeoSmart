@@ -26,17 +26,81 @@ namespace NeoSmart.Backend.Data
             await CheckRolesAsync();
             await CheckUsersAsync();
             await CheckPositionsAsync();
+            await CheckThemesAsync();
+            await CheckCapacitationsAsync();
+            await ChecCoachingskAsync();
+        }
+
+        private async Task ChecCoachingskAsync()
+        {
+            if (!_context.Coachings.Any())
+            {
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento en alturas", PositionId=1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Excel", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Indunción corportativa", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Reucados", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Ingreso al parqueadero", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Servicio al cliente", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Manejo de quimicos", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Maejo de extintores", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Manejo de arnes", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Manejo de productos agricolas", PositionId = 1 });
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task CheckCapacitationsAsync()
+        {
+            if (!_context.Capacitations.Any())
+            {
+                _context.Capacitations.Add(new Capacitation { Name = "Seguridad en alturas" });
+                _context.Capacitations.Add(new Capacitation { Name = "Excel" });
+                _context.Capacitations.Add(new Capacitation { Name = "Indunción corportativa" });
+                _context.Capacitations.Add(new Capacitation { Name = "Reucados" });
+                _context.Capacitations.Add(new Capacitation { Name = "Ingreso al parqueadero" });
+                _context.Capacitations.Add(new Capacitation { Name = "Servicio al cliente" });
+                _context.Capacitations.Add(new Capacitation { Name = "Manejo de quimicos" });
+                _context.Capacitations.Add(new Capacitation { Name = "Maejo de extintores" });
+                _context.Capacitations.Add(new Capacitation { Name = "Manejo de arnes" });
+                _context.Capacitations.Add(new Capacitation { Name = "Manejo de productos agricolas" });
+
+                await _context.SaveChangesAsync();
+            }
+        }
+        private async Task CheckThemesAsync()
+        {
+            if (!_context.Themes.Any())
+            {
+                _context.Themes.Add(new Theme { Name = "Seguridad en el trabajo" });
+                _context.Themes.Add(new Theme { Name = "Agilidad" });
+                _context.Themes.Add(new Theme { Name = "Gestión del cambio" });
+                _context.Themes.Add(new Theme { Name = "Fomento de la confianza" });
+                _context.Themes.Add(new Theme { Name = "Liderando a través de culturas" });
+                _context.Themes.Add(new Theme { Name = "Menejo de  " });
+                _context.Themes.Add(new Theme { Name = "Manejo del tiempo" });
+                _context.Themes.Add(new Theme { Name = "Comunicación" });
+                _context.Themes.Add(new Theme { Name = "Liderazgo" });
+                _context.Themes.Add(new Theme { Name = "Organización" });
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task CheckPositionsAsync()
         {
             if (!_context.Positions.Any())
             {
-                _context.Positions.Add(new Position { Name = "Administrador" });
+                _context.Positions.Add(new Position { Name = "Analista de riesgos" });
+                _context.Positions.Add(new Position { Name = "Auditor financiero" });
+                _context.Positions.Add(new Position { Name = "Ingeniero quimico" });
                 _context.Positions.Add(new Position { Name = "Gerente" });
-                _context.Positions.Add(new Position { Name = "Lider" });
-                _context.Positions.Add(new Position { Name = "Capacitador" });
-                _context.Positions.Add(new Position { Name = "Empleado" });
+                _context.Positions.Add(new Position { Name = "Servicios de aseo" });
+                _context.Positions.Add(new Position { Name = "Ingeniero de sistemas" });
+                _context.Positions.Add(new Position { Name = "Contador publico" });
+                _context.Positions.Add(new Position { Name = "Auxiliar contable" });
+                _context.Positions.Add(new Position { Name = "Gerente sucursal girardota" });
+                _context.Positions.Add(new Position { Name = "Gerente sucursal envigado" });
                 await _context.SaveChangesAsync();
             }
         }

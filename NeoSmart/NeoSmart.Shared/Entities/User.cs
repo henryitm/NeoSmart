@@ -28,11 +28,9 @@ namespace NeoSmart.Shared.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Email { get; set; } = null!;
 
-        public City? City { get; set; }
-
-        [Display(Name = "Ciudad")]
-        [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una {0}.")]
         public int CityId { get; set; }
+
+        public City? City { get; set; }
 
     }
 }

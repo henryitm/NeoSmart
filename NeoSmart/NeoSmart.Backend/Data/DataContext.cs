@@ -9,6 +9,12 @@ namespace NeoSmart.Backend.Data
         {
         }
 
+        public DbSet<CapacitationTheme> CapacitationsThemes { get; set; }
+
+        public DbSet<Capacitation> Capacitations { get; set; }
+
+        public DbSet<Theme> Themes { get; set; }
+
         public DbSet<Position> Positions { get; set; }
 
         public DbSet<Coaching> Coachings { get; set; }
@@ -26,6 +32,9 @@ namespace NeoSmart.Backend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<CapacitationTheme>().HasIndex(c => c.Id).IsUnique();
+            modelBuilder.Entity<Capacitation>().HasIndex(c => c.Name).IsUnique();
+            modelBuilder.Entity<Theme>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Position>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Coaching>().HasIndex(s => new { s.PositionId, s.Name }).IsUnique();
             modelBuilder.Entity<User>().HasIndex(c => c.Document).IsUnique();
