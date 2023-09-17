@@ -35,16 +35,16 @@ namespace NeoSmart.Backend.Data
         {
             if (!_context.Coachings.Any())
             {
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento en alturas", PositionId=1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Excel", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Indunción corportativa", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Reucados", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Ingreso al parqueadero", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Servicio al cliente", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Manejo de quimicos", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Maejo de extintores", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Manejo de arnes", PositionId = 1 });
-                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Manejo de productos agricolas", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento seguridad y salud ocupacional", PositionId=1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Informatica", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Administración general", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Cartera", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Seguridad fisica", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Mercadeo y ventas", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Producción polimerización", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Operatividad SST", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Riesgos SST", PositionId = 1 });
+                _context.Coachings.Add(new Coaching { Name = "Entrenamiento Producción Agroquimicos", PositionId = 1 });
 
                 await _context.SaveChangesAsync();
             }
@@ -91,7 +91,7 @@ namespace NeoSmart.Backend.Data
         {
             if (!_context.Positions.Any())
             {
-                _context.Positions.Add(new Position { Name = "Analista de riesgos" });
+                _context.Positions.Add(new Position { Name = "Coordinador SST" });
                 _context.Positions.Add(new Position { Name = "Auditor financiero" });
                 _context.Positions.Add(new Position { Name = "Ingeniero quimico" });
                 _context.Positions.Add(new Position { Name = "Gerente" });
